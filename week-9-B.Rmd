@@ -8,6 +8,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(PPBDS.data)
 library(rstanarm)
 library(tidyverse)
+library(rsample)
 
 # There is one change to our data from Tuesday. We have a created a new
 # variable: `poverty_n`, where the "n" stands for "normalized." To normalize data
@@ -33,10 +34,19 @@ week_9 <- kenya %>%
 
 * Write the math for this model.
 
+$$ reg\_chg_i = \beta_0 + \beta_1treatment_i + \beta_2poverty\_n_i + \beta_3treatment_ipoerty\_n_i + \epsilon_i $$
+
 * Describe the population for which you are creating the model.
 
 * Fit the  model and interpret the coefficients. Focus on the coefficient of the interaction term.
 
+```{r sc1}
+sc1 <- stan_glm(data = week_9,
+         formula = reg_chg ~ treatment + poverty_n + treatment*poverty_n,
+         refresh = 0)
+
+print(sc1, detail = FALSE, digits = 5)
+```
 
 
 
@@ -56,6 +66,27 @@ Write a sentence or two for each of these topics:
 
 * Answer the President's question.
 
+```{r sc2}
+sc1 %>%
+  as_tibble() 
+
+
+
+
+
+
+
+
+#sc1 %>%
+#  as_tibble() %>%
+#  rename(mu = `(Intercept)`) %>%
+ # ggplot(aes(x = mu)) +
+ # geom_histogram(aes(y = after_stat(count / sum(count))),
+         #        bins = 100,
+         #        alpha = 0.5,
+         #        position = "identity")
+
+```
 
 
 
